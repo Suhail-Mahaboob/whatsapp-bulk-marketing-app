@@ -1,0 +1,39 @@
+name: Build Desktop Apps
+
+on:
+  push:
+    tags:
+      - 'v*' # Triggers the compilation automatically when a release tag is published
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install pyinstaller pandas pywhatkit openpyxl Pillow
+
+    - name: Build Application with PyInstaller
+      run: |
+        pyinstaller --onefile --noconsole --name="WhatsApp_CRM" app.py
+
+    - name: Upload Finished Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: WhatsApp_CRM-${{ matrix.os }}
+        path: |
+          dist/WhatsApp_CRM.exe
+          dist/WhatsApp_CRM.app
+          dist/WhatsApp_CRM
