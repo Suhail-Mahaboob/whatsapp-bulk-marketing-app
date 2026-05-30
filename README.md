@@ -1,18 +1,17 @@
 # 🚀 Bulk WhatsApp Marketing & CRM Software
 
-A powerful, free desktop application to manage thousands of contacts, categorize them into filtered target groups, and send automated text or media broadcasts directly through WhatsApp.
+A custom-built, free desktop application to manage contacts, filter them by target categories, and send automated text or media broadcast campaigns directly through WhatsApp Web.
 
-## 📥 How to Install and Run
+## 📥 How to Run the Software
 
-### For Windows Users:
-1. Go to the **Releases** tab on the right side of this page and download the latest `WhatsApp_CRM_Source.zip`.
-2. Extract the downloaded folder to your Desktop.
-3. Double-click the file named **`install_and_run_windows.bat`**.
-4. The system will automatically configure your local packages, compile the software into a real `.exe` file tailored to your machine, and open the dashboard!
+### Prerequisites:
+Make sure you have Python installed on your system. If you don't have it, download it here: [Python Downloads](https://www.python.org/downloads/).
 
-### For Mac Users:
-1. Go to the **Releases** tab on the right side of this page and download the latest `WhatsApp_CRM_Source.zip`.
-2. Extract the downloaded folder.
-3. Open your Mac Terminal app, navigate to the folder, and run:
+### 🛠️ Execution Steps (Windows & Mac):
+
+1. **Download the project:** Click the green **Code** button at the top right of this page and click **Download ZIP**. Extract the folder to your desktop.
+
+2. **Open Terminal / Command Prompt:**
+   Open your terminal (Mac) or Command Prompt (Windows) and navigate into the extracted folder:
    ```bash
-   bash install_and_run_mac.sh
+   cd path/to/your/extracted/folder
