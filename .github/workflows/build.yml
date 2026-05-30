@@ -5,6 +5,10 @@ on:
     tags:
       - 'v*'
 
+# THIS SECURES WRITING PERMISSIONS FOR YOUR RELEASE FILES
+permissions:
+  contents: write
+
 jobs:
   zip-project:
     runs-on: ubuntu-latest
@@ -17,7 +21,7 @@ jobs:
         mkdir -p WhatsApp_CRM_Installer
         cp app.py WhatsApp_CRM_Installer/
         
-        # Windows Installer Script
+        # Windows Installer Script Setup
         echo '@echo off' > WhatsApp_CRM_Installer/install_and_run_windows.bat
         echo 'echo Setting up your WhatsApp Marketing Software dependencies...' >> WhatsApp_CRM_Installer/install_and_run_windows.bat
         echo 'pip install pyinstaller pandas openpyxl Pillow pywhatkit requests' >> WhatsApp_CRM_Installer/install_and_run_windows.bat
@@ -26,7 +30,7 @@ jobs:
         echo 'echo Done! Launching your app...' >> WhatsApp_CRM_Installer/install_and_run_windows.bat
         echo 'start dist/WhatsApp_CRM.exe' >> WhatsApp_CRM_Installer/install_and_run_windows.bat
 
-        # Mac Installer Script
+        # Mac Installer Script Setup
         echo '#!/bin/bash' > WhatsApp_CRM_Installer/install_and_run_mac.sh
         echo 'echo Setting up your WhatsApp Marketing Software dependencies...' >> WhatsApp_CRM_Installer/install_and_run_mac.sh
         echo 'pip3 install pyinstaller pandas openpyxl Pillow pywhatkit requests' >> WhatsApp_CRM_Installer/install_and_run_mac.sh
@@ -42,5 +46,3 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         files: WhatsApp_CRM_Source.zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
