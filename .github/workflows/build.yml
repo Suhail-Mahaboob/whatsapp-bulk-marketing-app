@@ -1,4 +1,4 @@
-name: Prepare Release Packages
+name: Package Codebase
 
 on:
   push:
@@ -6,40 +6,41 @@ on:
       - 'v*'
 
 jobs:
-  package:
+  zip-project:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
+    - name: Checkout Code
       uses: actions/checkout@v4
 
-    - name: Create Zip Package
+    - name: Build Installer Package
       run: |
-        mkdir -p dist/WhatsApp_CRM_Installer
-        cp app.py dist/WhatsApp_CRM_Installer/
+        mkdir -p WhatsApp_CRM_Installer
+        cp app.py WhatsApp_CRM_Installer/
         
-        # Create a universal one-click setup script for Windows users
-        echo '@echo off' > dist/WhatsApp_CRM_Installer/install_and_run_windows.bat
-        echo 'echo Setting up your WhatsApp Marketing Software dependencies...' >> dist/WhatsApp_CRM_Installer/install_and_run_windows.bat
-        echo 'pip install pyinstaller pandas openpyxl Pillow pywhatkit requests' >> dist/WhatsApp_CRM_Installer/install_and_run_windows.bat
-        echo 'echo Compiling application for your Windows setup...' >> dist/WhatsApp_CRM_Installer/install_and_run_windows.bat
-        echo 'pyinstaller --onefile --noconsole --name="WhatsApp_CRM" app.py' >> dist/WhatsApp_CRM_Installer/install_and_run_windows.bat
-        echo 'echo Done! Launching your app...' >> dist/WhatsApp_CRM_Installer/install_and_run_windows.bat
-        echo 'start dist/WhatsApp_CRM.exe' >> dist/WhatsApp_CRM_Installer/install_and_run_windows.bat
+        # Windows Installer Script
+        echo '@echo off' > WhatsApp_CRM_Installer/install_and_run_windows.bat
+        echo 'echo Setting up your WhatsApp Marketing Software dependencies...' >> WhatsApp_CRM_Installer/install_and_run_windows.bat
+        echo 'pip install pyinstaller pandas openpyxl Pillow pywhatkit requests' >> WhatsApp_CRM_Installer/install_and_run_windows.bat
+        echo 'echo Compiling application for your Windows setup...' >> WhatsApp_CRM_Installer/install_and_run_windows.bat
+        echo 'pyinstaller --onefile --noconsole --name="WhatsApp_CRM" app.py' >> WhatsApp_CRM_Installer/install_and_run_windows.bat
+        echo 'echo Done! Launching your app...' >> WhatsApp_CRM_Installer/install_and_run_windows.bat
+        echo 'start dist/WhatsApp_CRM.exe' >> WhatsApp_CRM_Installer/install_and_run_windows.bat
 
-        # Create a universal one-click setup script for Mac users
-        echo '#!/bin/bash' > dist/WhatsApp_CRM_Installer/install_and_run_mac.sh
-        echo 'echo Setting up your WhatsApp Marketing Software dependencies...' >> dist/WhatsApp_CRM_Installer/install_and_run_mac.sh
-        echo 'pip3 install pyinstaller pandas openpyxl Pillow pywhatkit requests' >> dist/WhatsApp_CRM_Installer/install_and_run_mac.sh
-        echo 'echo Compiling application for your macOS setup...' >> dist/WhatsApp_CRM_Installer/install_and_run_mac.sh
-        echo 'pyinstaller --onefile --noconsole --name="WhatsApp_CRM" app.py' >> dist/WhatsApp_CRM_Installer/install_and_run_mac.sh
-        echo 'echo Done! Launching your app...' >> dist/WhatsApp_CRM_Installer/install_and_run_mac.sh
-        echo 'open dist/WhatsApp_CRM.app' >> dist/WhatsApp_CRM_Installer/install_and_run_mac.sh
-        chmod +x dist/WhatsApp_CRM_Installer/install_and_run_mac.sh
+        # Mac Installer Script
+        echo '#!/bin/bash' > WhatsApp_CRM_Installer/install_and_run_mac.sh
+        echo 'echo Setting up your WhatsApp Marketing Software dependencies...' >> WhatsApp_CRM_Installer/install_and_run_mac.sh
+        echo 'pip3 install pyinstaller pandas openpyxl Pillow pywhatkit requests' >> WhatsApp_CRM_Installer/install_and_run_mac.sh
+        echo 'echo Compiling application for your macOS setup...' >> WhatsApp_CRM_Installer/install_and_run_mac.sh
+        echo 'pyinstaller --onefile --noconsole --name="WhatsApp_CRM" app.py' >> WhatsApp_CRM_Installer/install_and_run_mac.sh
+        echo 'echo Done! Launching your app...' >> WhatsApp_CRM_Installer/install_and_run_mac.sh
+        echo 'open dist/WhatsApp_CRM.app' >> WhatsApp_CRM_Installer/install_and_run_mac.sh
+        chmod +x WhatsApp_CRM_Installer/install_and_run_mac.sh
 
-        cd dist && zip -r WhatsApp_CRM_Source.zip WhatsApp_CRM_Installer/
+        zip -r WhatsApp_CRM_Source.zip WhatsApp_CRM_Installer/
 
-    - name: Upload Universal Package
-      uses: actions/upload-artifact@v4
+    - name: Deploy to Release Page
+      uses: softprops/action-gh-release@v2
       with:
-        name: WhatsApp_CRM_Universal
-        path: dist/WhatsApp_CRM_Source.zip
+        files: WhatsApp_CRM_Source.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
